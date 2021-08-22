@@ -17,9 +17,14 @@ namespace Example.ConsoleApp
         public static async Task Main(string[] args)
         {
             var container = new ContainerBuilder();
+
+            // 演示将两个选项数据文件读取并载入
             container.RegisterOptionYamlFiles("CoderSetting.yaml", DatabaseSettingFilePath)
+                // 将上一步载入的数据绑定到实体类
                 .RegisterOption<CoderSetting>()
+                // 将上一步载入的数据绑定到实体类
                 .RegisterOption<DatabaseSetting>();
+
             container.RegisterType<ConsoleMenuRunner>();
             container.RegisterType<MainMenu>();
 
@@ -69,14 +74,16 @@ namespace Example.ConsoleApp
         {
             var st = new CoderSetting();
             st.Demo();
-            var ys = new Serializer();
-            var yaml = ys.Serialize(st);
+            var yaml = YamlOption.BuildOptionData(st);
             Console.WriteLine(yaml);
         }
     }
 
     public class CoderSetting
     {
+        /// <summary>
+        /// 生成模拟数据
+        /// </summary>
         public void Demo()
         {
             Guid = Guid.NewGuid();
